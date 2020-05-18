@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="310dp"
+    android:layout_height="100dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/frame_layout_background"
+    tools:ignore="Overdraw">
+
+
+    <TextView
+        android:id="@+id/countdownText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center"
+        android:layout_marginStart="10dp"
+        android:text="0:00:00"
+        android:textSize="50sp"
+        android:textColor="#FFFFFF"/>
+
+    <ImageView
+        android:id="@+id/fullscreenBtn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_fullscreen"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"/>
+
+    <ImageView
+        android:id="@+id/closeBtn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="end|top"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/ic_close"/>
+
+    <ImageView
+        android:id="@+id/pauseBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="50dp"
+        android:src="@drawable/ic_pause"/>
+
+    <ImageView
+        android:id="@+id/stopBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center|end"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_stop"/>
+
+
+</FrameLayout>

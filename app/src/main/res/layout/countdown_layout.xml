@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/frame_layout_background"
+    tools:ignore="Overdraw">
+
+    <TextView
+        android:id="@+id/countdownTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Countdown"
+        android:layout_gravity="top|center"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="80dp"
+        android:layout_marginRight="39dp"
+        android:textColor="#FFFFFF"
+        android:textSize="50sp"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="39dp"
+        android:textColor="#FFFFFF"
+        android:textSize="50sp"/>
+
+    <TextView
+        android:id="@+id/hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="85dp"
+        android:layout_marginRight="75dp"
+        android:textSize="50sp"
+        android:inputType="number"
+        android:textColor="#FFFFFF"
+        android:text="00"
+        android:focusable="false"
+        android:visibility="invisible"
+        android:maxLength="2" />
+
+    <NumberPicker
+        android:id="@+id/hoursPicker"
+        style="@android:style/Widget.Material.NumberPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_gravity="top|center"
+        android:layout_marginEnd="75dp"
+        android:layout_marginTop="50dp"
+        android:focusable="false"
+        android:theme="@style/AppTheme.Picker" />
+
+    <TextView
+        android:id="@+id/minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="85dp"
+        android:textSize="50sp"
+        android:inputType="number"
+        android:textColor="#FFFFFF"
+        android:text="00"
+        android:visibility="invisible"
+        android:maxLength="2" />
+
+    <NumberPicker
+        android:id="@+id/minutesPicker"
+        style="@android:style/Widget.Material.NumberPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="50dp"
+        android:focusable="false"
+        android:theme="@style/AppTheme.Picker"/>
+
+    <TextView
+        android:id="@+id/seconds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="85dp"
+        android:textSize="50sp"
+        android:layout_marginStart="75dp"
+        android:textColor="#FFFFFF"
+        android:inputType="number"
+        android:text="00"
+        android:maxLength="2"
+        android:focusable="false"
+        android:visibility="invisible"/>
+
+    <NumberPicker
+        android:id="@+id/secondsPicker"
+        style="@android:style/Widget.Material.NumberPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_gravity="top|center"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="50dp"
+        android:focusable="false"
+        android:descendantFocusability="beforeDescendants"
+        android:theme="@style/AppTheme.Picker"/>
+
+    <ImageView
+        android:id="@+id/closeBtn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:contentDescription="@string/app_name"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/ic_close" />
+
+    <ImageView
+        android:id="@+id/fullscreenBtn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:contentDescription="@string/app_name"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:src="@drawable/ic_fullscreen" />
+
+    <ImageView
+        android:id="@+id/playBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/app_name"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/ic_start" />
+</FrameLayout>

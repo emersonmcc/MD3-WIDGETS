@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/max_frameLayout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/fullscreen_background"
+    tools:ignore="Overdraw">
+
+    <TextView
+        android:id="@+id/countdownTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Countdown"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="10dp"
+        android:textColor="#FFFFFF"
+        android:textSize="50sp"/>
+
+    <TextView
+        android:id="@+id/maxCountdownText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center"
+        android:layout_marginBottom="20dp"
+        android:text="0:00:00"
+        android:textSize="100sp"
+        android:textColor="#FFFFFF"/>
+
+
+
+    <ImageView
+        android:id="@+id/exitFllscreenBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_fullscreen_exit"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"/>
+
+    <ImageView
+        android:id="@+id/pauseBtn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="75dp"
+        android:layout_marginRight="35dp"
+        android:src="@drawable/ic_pause"/>
+
+    <ImageView
+        android:id="@+id/stopBtn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center|center"
+        android:layout_marginTop="75dp"
+        android:layout_marginLeft="35dp"
+        android:src="@drawable/ic_stop"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="550dp"
+        android:layout_height="550dp"
+        android:layout_gravity="center"
+        android:progress="0"
+        android:progressDrawable="@drawable/circle_progress_bar"/>
+
+</FrameLayout>
