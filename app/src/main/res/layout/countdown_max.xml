@@ -45,7 +45,7 @@
         android:layout_height="70dp"
         android:layout_gravity="center"
         android:layout_marginTop="75dp"
-        android:layout_marginRight="35dp"
+        android:layout_marginEnd="35dp"
         android:src="@drawable/ic_pause"/>
 
     <ImageView
@@ -54,7 +54,7 @@
         android:layout_height="70dp"
         android:layout_gravity="center|center"
         android:layout_marginTop="75dp"
-        android:layout_marginLeft="35dp"
+        android:layout_marginStart="35dp"
         android:src="@drawable/ic_stop"/>
 
     <ProgressBar
@@ -63,7 +63,7 @@
         android:layout_width="550dp"
         android:layout_height="550dp"
         android:layout_gravity="center"
-        android:progress="0"
+        android:rotation="270"
         android:progressDrawable="@drawable/circle_progress_bar"/>
 
 </FrameLayout>

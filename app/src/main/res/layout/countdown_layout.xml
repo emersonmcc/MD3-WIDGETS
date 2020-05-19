@@ -23,7 +23,7 @@
         android:text=":"
         android:layout_gravity="top|center"
         android:layout_marginTop="80dp"
-        android:layout_marginRight="39dp"
+        android:layout_marginEnd="39dp"
         android:textColor="#FFFFFF"
         android:textSize="50sp"/>
 
@@ -34,24 +34,9 @@
         android:text=":"
         android:layout_gravity="top|center"
         android:layout_marginTop="80dp"
-        android:layout_marginLeft="39dp"
+        android:layout_marginStart="39dp"
         android:textColor="#FFFFFF"
         android:textSize="50sp"/>
-
-    <TextView
-        android:id="@+id/hours"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|center"
-        android:layout_marginTop="85dp"
-        android:layout_marginRight="75dp"
-        android:textSize="50sp"
-        android:inputType="number"
-        android:textColor="#FFFFFF"
-        android:text="00"
-        android:focusable="false"
-        android:visibility="invisible"
-        android:maxLength="2" />
 
     <NumberPicker
         android:id="@+id/hoursPicker"
@@ -64,19 +49,6 @@
         android:focusable="false"
         android:theme="@style/AppTheme.Picker" />
 
-    <TextView
-        android:id="@+id/minutes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|center"
-        android:layout_marginTop="85dp"
-        android:textSize="50sp"
-        android:inputType="number"
-        android:textColor="#FFFFFF"
-        android:text="00"
-        android:visibility="invisible"
-        android:maxLength="2" />
-
     <NumberPicker
         android:id="@+id/minutesPicker"
         style="@android:style/Widget.Material.NumberPicker"
@@ -86,21 +58,6 @@
         android:layout_marginTop="50dp"
         android:focusable="false"
         android:theme="@style/AppTheme.Picker"/>
-
-    <TextView
-        android:id="@+id/seconds"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|center"
-        android:layout_marginTop="85dp"
-        android:textSize="50sp"
-        android:layout_marginStart="75dp"
-        android:textColor="#FFFFFF"
-        android:inputType="number"
-        android:text="00"
-        android:maxLength="2"
-        android:focusable="false"
-        android:visibility="invisible"/>
 
     <NumberPicker
         android:id="@+id/secondsPicker"
