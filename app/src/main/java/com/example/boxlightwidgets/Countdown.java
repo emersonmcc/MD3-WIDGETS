@@ -37,15 +37,12 @@ public class Countdown extends Service {
     private ImageView closeBtn;
     private ImageView fullscreenBtn;
     private ImageView playBtn;
-    private TextView hoursText;
-    private TextView minutesText;
-    private TextView secondsText;
-    private int totalTime;
     private NumberPicker secondsPicker;
     private NumberPicker minutesPicker;
     private NumberPicker hoursPicker;
-    private boolean isPlaying = true;
     private WindowManager.LayoutParams params;
+
+    private CountdownLogic cntdwn;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -58,21 +55,10 @@ public class Countdown extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        DataHolder.getInstance().setIsPaused(false);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         addCountdownEditView();
-        DataHolder.getInstance().setIsPaused(false);
-    }
-
-    public void CalculateTime() {
-        if (isPlaying) {
-            totalTime = (hoursPicker.getValue() * 3600000) + (minutesPicker.getValue() * 60000) + (secondsPicker.getValue() * 1000);
-
-
-        } else {
-            totalTime = (Integer.parseInt(hoursText.getText().toString()) * 3600000) + (Integer.parseInt(minutesText.getText().toString()) * 60000) +
-                    (Integer.parseInt(secondsText.getText().toString()) * 1000);
-        }
-        DataHolder.getInstance().setMasterTotalTime(totalTime);
+        cntdwn = new CountdownLogic();
     }
 
     private void addCountdownEditView() {
@@ -92,7 +78,7 @@ public class Countdown extends Service {
                 LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
-        params.gravity = Gravity.CENTER | Gravity.CENTER;
+        params.gravity = Gravity.CENTER;
         params.x = 0;
         params.y = 0;
 
@@ -126,11 +112,6 @@ public class Countdown extends Service {
             windowManager.addView(minCountdownEditView, params);
             closeBtn = minCountdownEditView.findViewById(R.id.closeBtn);
             playBtn = minCountdownEditView.findViewById(R.id.playBtn);
-            hoursText = minCountdownEditView.findViewById(R.id.hours);
-            hoursText.setFilters(new InputFilter[]{new InputFilterMinMax("00", "24")});
-            minutesText = minCountdownEditView.findViewById(R.id.minutes);
-            minutesText.setFilters(new InputFilter[]{new InputFilterMinMax("00", "59")});
-            secondsText = minCountdownEditView.findViewById(R.id.seconds);
             secondsPicker = minCountdownEditView.findViewById(R.id.secondsPicker);
             String[] numbers = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22",
                     "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47",
@@ -170,13 +151,16 @@ public class Countdown extends Service {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    CalculateTime();
-                    if (totalTime <= 0) {
+                    cntdwn.CalculateTime(hoursPicker.getValue(), minutesPicker.getValue(), secondsPicker.getValue());
+                    if (cntdwn.getTotalTime() <= 0) {
                         Toast errorMessage = Toast.makeText(getApplicationContext(), "Countdown time needs to be greater than 0 seconds", Toast.LENGTH_SHORT);
                         errorMessage.show();
                     } else {
                         Intent intent = new Intent(v.getContext(), CountdownMin.class);
-                        DataHolder.getInstance().setTotalTime(totalTime);
+                        DataHolder.getInstance().setTotalTime(cntdwn.getTotalTime());
+                        DataHolder.getInstance().setMasterTotalTime(cntdwn.getTotalTime()); //Keep track of original total time for the progress bar animation on CountdownMax.java
+                        DataHolder.getInstance().setIsPaused(false);
+                        DataHolder.getInstance().setOnStart(true);
                         stopService(intent);
                         startService(intent);
                         onDestroy(minCountdownEditView);

@@ -13,23 +13,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class CountdownMax extends Activity {
-    private String getCountdownRemaining;
     private TextView countdownText;
     private ImageView pauseBtn;
     private ImageView stopBtn;
     private ImageView exitFullScrn;
     private CountDownTimer countDownTimer;
     private boolean isPlaying = true;
-    private int longNum;
     private int totalTime;
-    private String hoursText;
-    private String minutesText;
-    private String secondsText;
     private ProgressBar progressBar;
     private int progress;
-    private int masterTotalTime;
+    private double masterTotalTime;
 
     private CountdownLogic cntdwn;
+    private ProgressBarAnimation animation;
+    private int prevProgress = 0;
 
 
     @Override
@@ -39,10 +36,9 @@ public class CountdownMax extends Activity {
         cntdwn = new CountdownLogic();
 
         //Extract time remaining from DataHolder
-        totalTime = cntdwn.getTotalTime();
+        totalTime = DataHolder.getInstance().getTotalTime();
         masterTotalTime = DataHolder.getInstance().getMasterTotalTime();
         InitialiseScreenObjects();
-
     }
 
     public void InitialiseScreenObjects() {
@@ -52,6 +48,7 @@ public class CountdownMax extends Activity {
         stopBtn = findViewById(R.id.stopBtn);
         exitFullScrn = findViewById(R.id.exitFllscreenBtn);
         progressBar = findViewById(R.id.progressBar);
+        progressBar.setMax(1000);
 
         if(!DataHolder.getInstance().getIsPaused()) {
             MaxCountdownController(); //Set controls
@@ -60,10 +57,19 @@ public class CountdownMax extends Activity {
             pauseBtn.setImageResource(R.drawable.ic_start);
             isPlaying = false;
             System.out.println("b: " + totalTime);
-            cntdwn.upDateTimer(totalTime / 1000);
+            countdownText.setText(cntdwn.upDateTimer(totalTime / 1000));
             MaxCountdownController(); //Set controls
             System.out.println("a: " + totalTime);
         }
+    }
+
+    public void UpdateProgress(int milliseconds) {
+        if (prevProgress == 200) {
+            prevProgress = 1000;
+        }
+        masterTotalTime = DataHolder.getInstance().getMasterTotalTime();
+        double progress = milliseconds / masterTotalTime * 1000;
+        progressBar.setProgress((int) progress);
     }
 
     public void MaxCountdownController() {
@@ -78,7 +84,6 @@ public class CountdownMax extends Activity {
                         CalculateTime();
                         DataHolder.getInstance().setTotalTime(totalTime);
                     } else {
-                        CalculateTime();
                         StartCountdown();
                         pauseBtn.setImageResource(R.drawable.ic_pause);
                         DataHolder.getInstance().setIsPaused(false);
@@ -120,35 +125,30 @@ public class CountdownMax extends Activity {
     }
 
     public void CalculateTime() {
-        cntdwn.CalculateTime(Integer.parseInt(hoursText), Integer.parseInt(minutesText), Integer.parseInt(secondsText));
-        totalTime = cntdwn.getTotalTime();
+        totalTime = cntdwn.getTotalTime() * 1000;
     }
 
     public void StartCountdown() {
-        countDownTimer = new CountDownTimer(totalTime + 100, 1000) {
+        countDownTimer = new CountDownTimer(totalTime, 100) {
             @Override
             public void onTick(long millisUntilFinished) {
-//                masterTotalTime = DataHolder.getInstance().getMasterTotalTime();
-//                secondsLeft = (int) millisUntilFinished / 1000;
-//                masterTotalTime = masterTotalTime / 1000;
-//                float test = secondsLeft / masterTotalTime * 100;
-//                int progressT = (int) test;
-//
-//                //progressBar.setProgress(progressT);
-//                System.out.println("P: " + progressT + " S: " + secondsLeft + " MTT: " + masterTotalTime );
-//                System.out.println(millisUntilFinished / masterTotalTime * 100);
                 countdownText.setText(cntdwn.upDateTimer((int) millisUntilFinished / 1000));
+                UpdateProgress((int) millisUntilFinished);
             }
             @Override
             public void onFinish() {
+                if (progressBar.getProgress() != 0) {
+                    animation = new ProgressBarAnimation(progressBar, prevProgress, 0);
+                    animation.setDuration(1000);
+                    progressBar.startAnimation(animation);
+                    prevProgress = (int) progress;
+                }
                 MediaPlayer finishSound = MediaPlayer.create(getApplicationContext(),R.raw.countdown_finish_sound);
                 finishSound.start();
                 Toast completeMessage = Toast.makeText(getApplicationContext(), "Countdown complete!", Toast.LENGTH_SHORT);
                 completeMessage.show();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                while (progressBar.isAnimating()) {
+
                 }
                 Intent intent = new Intent(getApplicationContext(), CountdownMaxEdit.class);
                 startActivity(intent);

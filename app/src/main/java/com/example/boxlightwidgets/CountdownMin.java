@@ -31,7 +31,6 @@ import static java.lang.Integer.parseInt;
 public class CountdownMin extends Service {
 
     private static final String TAG = Countdown.class.getSimpleName();
-    public static final String INTENT_EXTRA = "com.example.boxlightwidgets.MESSAGE";
 
     private WindowManager windowManager;
 
@@ -40,17 +39,12 @@ public class CountdownMin extends Service {
     private ImageView fullscreenBtn;
     private ImageView pauseBtn;
     private ImageView stopBtn;
-    private String hoursText;
-    private String minutesText;
-    private String secondsText;
     private int totalTime;
     private CountDownTimer countDownTimer;
-    private boolean isPlaying = true;
-    private int longNum;
     private TextView countdownText;
-    private String getCountdownRemaining;
     private WindowManager.LayoutParams params;
-    private boolean onStart = true;
+
+    private CountdownLogic cntdwn;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -63,35 +57,28 @@ public class CountdownMin extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        totalTime = DataHolder.getInstance().getTotalTime();
+        cntdwn = new CountdownLogic();
+        totalTime = DataHolder.getInstance().getTotalTime(); // Set total time
+
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        addCountdownMinimisedView();
+        addCountdownMinimisedView(); //Add the countdown overlay to the view
+
         if(!DataHolder.getInstance().getIsPaused()) {
             StartCountdown();
         } else {
             pauseBtn.setImageResource(R.drawable.ic_start);
-            isPlaying = !isPlaying;
-            upDateTimer(totalTime / 1000);
+            countdownText.setText(cntdwn.upDateTimer(totalTime / 1000));
         }
-        onStart = false;
     }
 
-    public void CalculateTime() {
-        if (onStart) {
-
-        } else {
-            totalTime = (Integer.parseInt(hoursText) * 3600000) + (Integer.parseInt(minutesText) * 60000) +
-                    (Integer.parseInt(secondsText) * 1000);
-        }
-
-    }
+    public void CalculateTime() {totalTime = cntdwn.getTotalTime() * 1000;}
 
     public void StartCountdown() {
 
         countDownTimer = new CountDownTimer(totalTime + 100, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                upDateTimer((int) millisUntilFinished / 1000);
+                countdownText.setText(cntdwn.upDateTimer((int) millisUntilFinished / 1000));
             }
 
             @Override
@@ -113,36 +100,6 @@ public class CountdownMin extends Service {
         }.start();
     }
 
-    public void upDateTimer(int secondsLeft) {
-        longNum = secondsLeft;
-        int hours = longNum / 3600;
-        longNum = longNum - hours * 3600;
-        int minutes = longNum / 60;
-        longNum = longNum - minutes * 60;
-        int seconds = longNum;
-        String secondsString = Integer.toString(seconds);
-        String minutesString = Integer.toString(minutes);
-
-        //Check if seconds is <9
-        if (secondsString.length() == 1) {
-            secondsString = "0" + Integer.toString(seconds);
-        }
-        //Check if minutes is <9
-        if (minutesString.length() == 1) {
-            minutesString = "0" + Integer.toString(minutes);
-        }
-
-        setGetCountdownRemaining(hours, minutesString, secondsString);
-        hoursText = Integer.toString(hours);
-        minutesText = minutesString;
-        secondsText = secondsString;
-    }
-
-    private void setGetCountdownRemaining(int h, String m, String s) {
-        getCountdownRemaining = Integer.toString(h) + ":" + m + ":" + s;
-        countdownText.setText(getCountdownRemaining);
-    }
-
     private void addCountdownMinimisedView() {
 
         int layoutParamsType;
@@ -161,7 +118,7 @@ public class CountdownMin extends Service {
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
-        params.gravity = Gravity.CENTER | Gravity.CENTER;
+        params.gravity = Gravity.CENTER;
         params.x = 0;
         params.y = 0;
 
@@ -194,14 +151,11 @@ public class CountdownMin extends Service {
             pauseBtn = minimisedCountdownView.findViewById(R.id.pauseBtn);
             stopBtn = minimisedCountdownView.findViewById(R.id.stopBtn);
             fullscreenBtn = minimisedCountdownView.findViewById(R.id.fullscreenBtn);
-            CalculateTime();
             MinimisedCountdownController();
         }
         else {
             Log.e("SAW-example", "Layout Inflater Service is null; can't inflate and display R.layout.floating_view");
         }
-
-
     }
 
     private void MinimisedCountdownController() {
@@ -219,19 +173,18 @@ public class CountdownMin extends Service {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (isPlaying) {
+                    if (!DataHolder.getInstance().getIsPaused()) {
                         countDownTimer.cancel();
                         pauseBtn.setImageResource(R.drawable.ic_start);
                         DataHolder.getInstance().setIsPaused(true);
                         CalculateTime();
                         DataHolder.getInstance().setTotalTime(totalTime);
-                        Log.v(TAG, "Pause Btn press");
                     } else {
-                        CalculateTime();
                         StartCountdown();
                         pauseBtn.setImageResource(R.drawable.ic_pause);
+                        DataHolder.getInstance().setIsPaused(false);
                     }
-                    isPlaying = !isPlaying;
+
                 }
                 return false;
             }
@@ -302,6 +255,4 @@ public class CountdownMin extends Service {
             view = null;
         }
     }
-
-
 }

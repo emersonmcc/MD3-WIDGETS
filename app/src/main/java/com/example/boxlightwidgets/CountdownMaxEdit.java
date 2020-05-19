@@ -18,7 +18,7 @@ public class CountdownMaxEdit extends Activity {
     private NumberPicker hoursPicker;
     private ImageView playBtn;
     private ImageView exitFullScrn;
-    CountdownLogic cntdwn;
+    private CountdownLogic cntdwn;
 
 
     @Override
@@ -63,6 +63,7 @@ public class CountdownMaxEdit extends Activity {
                     } else {
                         Intent intent = new Intent(v.getContext(), CountdownMax.class);
                         DataHolder.getInstance().setTotalTime(cntdwn.getTotalTime());
+                        DataHolder.getInstance().setMasterTotalTime(cntdwn.getTotalTime()); //Keep track of original total time for the progress bar animation on CountdownMax.java
                         DataHolder.getInstance().setIsPaused(false);
                         DataHolder.getInstance().setOnStart(true);
                         startActivity(intent);
