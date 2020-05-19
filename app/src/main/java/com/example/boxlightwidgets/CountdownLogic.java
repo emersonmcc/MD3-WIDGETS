@@ -1,11 +1,5 @@
 package com.example.boxlightwidgets;
 
-import android.content.Context;
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.os.CountDownTimer;
-import android.widget.Toast;
-
 public class CountdownLogic {
 
     private boolean onStart = false;
@@ -21,11 +15,6 @@ public class CountdownLogic {
         totalTime = (hours * 3600000) + (minutes * 60000) + (seconds * 1000);
     }
 
-//    public void CalculateTimeOnStart() {
-//        CountdownMaxEdit tt = new CountdownMaxEdit();
-//        totalTime = tt.getTotalTime();
-//    }
-
     public String upDateTimer(int secondsLeft) {
         longNum = secondsLeft;
         totalTime = secondsLeft;
@@ -39,14 +28,14 @@ public class CountdownLogic {
 
         //Check if seconds is <9
         if (secondsString.length() == 1) {
-            secondsString = "0" + Integer.toString(seconds);
+            secondsString = "0" + seconds;
         }
         //Check if minutes is <9
         if (minutesString.length() == 1) {
-            minutesString = "0" + Integer.toString(minutes);
+            minutesString = "0" + minutes;
         }
 
-        countdownText = Integer.toString(hours) + ":" + minutesString + ":" + secondsString;
+        countdownText = hours + ":" + minutesString + ":" + secondsString;
         System.out.println("Still doing stuff..");
         return countdownText;
 

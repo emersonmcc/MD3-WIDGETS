@@ -4,7 +4,6 @@ public class DataHolder {
     private int totalTime;
     private boolean isPaused = false;
     private int masterTotalTime;
-    public int minmax = 0; //0 = min, 1 = max
     public int getTotalTime() {return totalTime;}
     public void setTotalTime(int totalTime) {this.totalTime = totalTime;}
     public boolean getIsPaused() {return isPaused;}

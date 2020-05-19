@@ -13,4 +13,9 @@
         <item name="android:textSize">30sp</item>
     </style>
 
+    <style name="CalculatorNumberButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/background_colour_green</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
 </resources>
