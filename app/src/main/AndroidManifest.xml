@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CountdownMaxEdit">
+        <activity android:name=".CountdownMaxEdit" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
@@ -38,12 +38,16 @@
             android:exported="false"/>
 
         <service
-            android:name=".Countdown" />
+            android:name=".CountdownMinEdit" android:exported="true">
+            <intent-filter>
+                <action android:name="StartCountdownService"/>
+            </intent-filter>
+        </service>
 
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+        <service android:name=".Calculator">
+        </service>
 
+        <service android:name=".Toolbar"/>
 
     </application>
 

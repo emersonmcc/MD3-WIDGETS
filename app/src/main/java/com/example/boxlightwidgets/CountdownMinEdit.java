@@ -7,29 +7,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
-import android.os.CountDownTimer;
 import android.os.IBinder;
-import android.text.InputFilter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
-public class Countdown extends Service {
+public class CountdownMinEdit extends Service {
 
-    private static final String TAG = Countdown.class.getSimpleName();
-    public static final String INTENT_EXTRA = "com.example.boxlightwidgets.MESSAGE";
+    private static final String TAG = CountdownMinEdit.class.getSimpleName();
 
     private WindowManager windowManager;
 
@@ -41,8 +35,6 @@ public class Countdown extends Service {
     private NumberPicker minutesPicker;
     private NumberPicker hoursPicker;
     private WindowManager.LayoutParams params;
-
-    private CountdownLogic cntdwn;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -58,7 +50,7 @@ public class Countdown extends Service {
         DataHolder.getInstance().setIsPaused(false);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         addCountdownEditView();
-        cntdwn = new CountdownLogic();
+        CountdownEditController();
     }
 
     private void addCountdownEditView() {
@@ -132,115 +124,11 @@ public class Countdown extends Service {
         else {
             Log.e("SAW-example", "Layout Inflater Service is null; can't inflate and display R.layout.floating_view");
         }
-        CountdownEditController();
-
     }
 
     private void CountdownEditController() {
-        closeBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    onDestroy(minCountdownEditView);
-                }
-                return false;
-            }
-        });
-
-        playBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    cntdwn.CalculateTime(hoursPicker.getValue(), minutesPicker.getValue(), secondsPicker.getValue());
-                    if (cntdwn.getTotalTime() <= 0) {
-                        Toast errorMessage = Toast.makeText(getApplicationContext(), "Countdown time needs to be greater than 0 seconds", Toast.LENGTH_SHORT);
-                        errorMessage.show();
-                    } else {
-                        Intent intent = new Intent(v.getContext(), CountdownMin.class);
-                        DataHolder.getInstance().setTotalTime(cntdwn.getTotalTime());
-                        DataHolder.getInstance().setMasterTotalTime(cntdwn.getTotalTime()); //Keep track of original total time for the progress bar animation on CountdownMax.java
-                        DataHolder.getInstance().setIsPaused(false);
-                        DataHolder.getInstance().setOnStart(true);
-                        stopService(intent);
-                        startService(intent);
-                        onDestroy(minCountdownEditView);
-                    }
-                }
-                return false;
-            }
-        });
-
-        secondsPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        minutesPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        hoursPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        fullscreenBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    Intent intent = new Intent(v.getContext(), CountdownMaxEdit.class);
-                    onDestroy(minCountdownEditView);
-                    startActivity(intent);
-                }
-                return false;
-            }
-        });
-
-        minCountdownEditView.setOnTouchListener(new View.OnTouchListener() {
-            private LayoutParams updatedParameters = params;
-            int x, y;
-            float touchX, touchY;
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                    //When detects one finger, mode is set to none for basic movement.
-                    case MotionEvent.ACTION_DOWN:
-                        x = updatedParameters.x;
-                        y = updatedParameters.y;
-                        touchX = event.getRawX();
-                        touchY = event.getRawY();
-                        return true;
-
-                    case MotionEvent.ACTION_MOVE:
-                        updatedParameters.x = (int) (x + (event.getRawX() - touchX));
-                        updatedParameters.y = (int) (y + (event.getRawY() - touchY));
-                        windowManager.updateViewLayout(minCountdownEditView, updatedParameters);
-                        System.out.println("3");
-                        return true;
-                }
-                return false;
-            }
-        });
+        WidgetController countdownEditController = new WidgetController();
+        countdownEditController.CountdownEditController(closeBtn, fullscreenBtn, playBtn, hoursPicker, minutesPicker, secondsPicker, minCountdownEditView,
+                windowManager, params, CountdownMinEdit.class, getApplicationContext());
     }
-    
-    public void onDestroy(View view) {
-
-        super.onDestroy();
-
-        if (view != null) {
-
-            windowManager.removeView(view);
-
-            view = null;
-        }
-    }
-
-
 }

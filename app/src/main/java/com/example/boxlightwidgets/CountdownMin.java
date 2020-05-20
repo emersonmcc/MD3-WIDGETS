@@ -24,13 +24,12 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
-import static android.content.Context.WINDOW_SERVICE;
 import static java.lang.Integer.getInteger;
 import static java.lang.Integer.parseInt;
 
 public class CountdownMin extends Service {
 
-    private static final String TAG = Countdown.class.getSimpleName();
+    private static final String TAG = CountdownMinEdit.class.getSimpleName();
 
     private WindowManager windowManager;
 
@@ -92,7 +91,7 @@ public class CountdownMin extends Service {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Intent intent = new Intent(getApplicationContext(), Countdown.class);
+                Intent intent = new Intent(getApplicationContext(), CountdownMinEdit.class);
                 stopService(intent);
                 startService(intent);
                 onDestroy(minimisedCountdownView);
@@ -195,7 +194,7 @@ public class CountdownMin extends Service {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     countDownTimer.cancel();
-                    Intent intent = new Intent(getApplicationContext(), Countdown.class);
+                    Intent intent = new Intent(getApplicationContext(), CountdownMinEdit.class);
                     stopService(intent);
                     startService(intent);
                     onDestroy(minimisedCountdownView);

@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchMainService() {
 
-        Intent svc = new Intent(this, Countdown.class);
+        Intent svc = new Intent(this, Toolbar.class);
 
         stopService(svc);
         startService(svc);

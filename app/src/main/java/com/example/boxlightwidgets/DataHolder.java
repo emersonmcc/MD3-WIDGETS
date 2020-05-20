@@ -4,6 +4,12 @@ public class DataHolder {
     private int totalTime;
     private boolean isPaused = false;
     private int masterTotalTime;
+    private boolean calculatorOpened = false;
+    private boolean countdownOpened = false;
+    public boolean getCalculatorOpened() {return calculatorOpened;}
+    public void setCalculatorOpened(boolean calculatorOpened) {this.calculatorOpened = calculatorOpened;}
+    public boolean getCountdownOpened() {return countdownOpened;}
+    public void setCountdownOpened(boolean countdownOpened) {this.countdownOpened = countdownOpened;}
     public int getTotalTime() {return totalTime;}
     public void setTotalTime(int totalTime) {this.totalTime = totalTime;}
     public boolean getIsPaused() {return isPaused;}

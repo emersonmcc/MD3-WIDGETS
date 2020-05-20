@@ -18,7 +18,6 @@ public class CountdownMaxEdit extends Activity {
     private NumberPicker hoursPicker;
     private ImageView playBtn;
     private ImageView exitFullScrn;
-    private CountdownLogic cntdwn;
 
 
     @Override
@@ -27,7 +26,6 @@ public class CountdownMaxEdit extends Activity {
         DataHolder.getInstance().setIsPaused(false);
         setContentView(R.layout.countdown_edit_max);
         InitialiseScreenObjects();
-        cntdwn = new CountdownLogic();
     }
 
     private void InitialiseScreenObjects() {
@@ -52,62 +50,19 @@ public class CountdownMaxEdit extends Activity {
     }
 
     private void CountdownMaxEditController() {
-        playBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    cntdwn.CalculateTime(hoursPicker.getValue(), minutesPicker.getValue(), secondsPicker.getValue());
-                    if (cntdwn.getTotalTime() <= 0) {
-                        Toast errorMessage = Toast.makeText(getApplicationContext(), "Countdown time needs to be greater than 0 seconds", Toast.LENGTH_SHORT);
-                        errorMessage.show();
-                    } else {
-                        Intent intent = new Intent(v.getContext(), CountdownMax.class);
-                        DataHolder.getInstance().setTotalTime(cntdwn.getTotalTime());
-                        DataHolder.getInstance().setMasterTotalTime(cntdwn.getTotalTime()); //Keep track of original total time for the progress bar animation on CountdownMax.java
-                        DataHolder.getInstance().setIsPaused(false);
-                        DataHolder.getInstance().setOnStart(true);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-                return false;
-            }
-        });
+        WidgetController countdownMaxEditController = new WidgetController();
+        countdownMaxEditController.CountdownMaxEditController(exitFullScrn, playBtn, hoursPicker, minutesPicker, secondsPicker, CountdownMaxEdit.class, this);
+    }
 
-        secondsPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    public void youreDone() {
+        finish();
+        System.out.println("TRYING TO DESTROY");
+    }
 
-            }
-        });
-
-        minutesPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        hoursPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        exitFullScrn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    Intent svc = new Intent(v.getContext(), Countdown.class);
-
-                    stopService(svc);
-                    startService(svc);
-                    finish();
-                }
-                return false;
-            }
-        });
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
     }
 
 }

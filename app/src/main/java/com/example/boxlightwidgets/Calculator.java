@@ -1,30 +1,26 @@
 package com.example.boxlightwidgets;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.text.InputFilter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
-import android.widget.TextView;
 
 public class Calculator extends Service {
 
     private WindowManager windowManager;
     private View calculatorView;
     private WindowManager.LayoutParams params;
+    private Button closeBtn;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -34,7 +30,10 @@ public class Calculator extends Service {
 
     @Override
     public void onCreate() {
+        super.onCreate();
+        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         AddCalculatorView();
+        CalculatorController();
     }
 
     public void AddCalculatorView() {
@@ -49,7 +48,7 @@ public class Calculator extends Service {
 
         params = new WindowManager.LayoutParams(
                 500,
-                WindowManager.LayoutParams.WRAP_CONTENT,
+                500,
                 layoutParamsType,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
@@ -85,9 +84,39 @@ public class Calculator extends Service {
 
         if (inflater != null) {
             calculatorView = inflater.inflate(R.layout.calculator_layout, interceptorLayout);
+            calculatorView.setBackgroundResource(R.drawable.frame_layout_background);
             windowManager.addView(calculatorView, params);
+            closeBtn = calculatorView.findViewById(R.id.btn_close);
         } else {
             Log.e("SAW-example", "Layout Inflater Service is null; can't inflate and display R.layout.floating_view");
+        }
+    }
+
+    public void CalculatorController() {
+        closeBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    onDestroy(calculatorView);
+                    DataHolder.getInstance().setCalculatorOpened(false);
+                }
+                return false;
+            }
+        });
+
+        WidgetController calculatorMove = new WidgetController();
+        //calculatorMove.CountdownEditController(calculatorView, windowManager, params);
+    }
+
+    public void onDestroy(View view) {
+
+        super.onDestroy();
+
+        if (view != null) {
+
+            windowManager.removeView(view);
+
+            view = null;
         }
     }
 
