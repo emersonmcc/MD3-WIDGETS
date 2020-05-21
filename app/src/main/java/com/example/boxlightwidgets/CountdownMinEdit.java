@@ -128,7 +128,7 @@ public class CountdownMinEdit extends Service {
 
     private void CountdownEditController() {
         WidgetController countdownEditController = new WidgetController();
-        countdownEditController.CountdownEditController(closeBtn, fullscreenBtn, playBtn, hoursPicker, minutesPicker, secondsPicker, minCountdownEditView,
+        countdownEditController.CountdownMinEditController(closeBtn, fullscreenBtn, playBtn, hoursPicker, minutesPicker, secondsPicker, minCountdownEditView,
                 windowManager, params, CountdownMinEdit.class, getApplicationContext());
     }
 }

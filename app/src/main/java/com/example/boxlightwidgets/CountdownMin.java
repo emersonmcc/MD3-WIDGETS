@@ -241,6 +241,8 @@ public class CountdownMin extends Service {
                 return false;
             }
         });
+        WidgetController countdownMinController = new WidgetController();
+        countdownMinController.CountdownMinController(pauseBtn, stopBtn, fullscreenBtn, closeBtn, CountdownMin.class, this);
     }
 
     public void onDestroy(View view) {

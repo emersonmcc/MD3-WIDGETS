@@ -18,8 +18,8 @@ public class WidgetController {
 
     private WindowManager.LayoutParams params;
 
-    public void CountdownEditController(ImageView closeBtn, ImageView fullscreenBtn, ImageView playBtn, NumberPicker hours, NumberPicker minutes, NumberPicker seconds,
-                                        View view, WindowManager windowManager, WindowManager.LayoutParams params, Class from, Context context) {
+    public void CountdownMinEditController(ImageView closeBtn, ImageView fullscreenBtn, ImageView playBtn, NumberPicker hours, NumberPicker minutes, NumberPicker seconds,
+                                           View view, WindowManager windowManager, WindowManager.LayoutParams params, Class from, Context context) {
         this.view = view;
         this. windowManager = windowManager;
         EnableMovement(view, windowManager, params);
@@ -34,6 +34,14 @@ public class WidgetController {
         NumberPickers(hours, minutes, seconds);
         StartCountdown(playBtn, hours, minutes, seconds, from, context);
         MaxGeneral(minimise, from, context);
+
+    }
+
+    public void CountdownMinController(ImageView pause, ImageView stop, ImageView fullscreen, ImageView close, Class from, Context context) {
+                MediaControlls(pause, stop);
+    }
+
+    private void MediaControlls(ImageView pause, ImageView stop) {
 
     }
 
