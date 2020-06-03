@@ -1,4 +1,6 @@
-package com.example.boxlightwidgets;
+package com.example.boxlightwidgets.Countdown;
+
+import com.example.boxlightwidgets.Helper.DataHolder;
 
 public class CountdownLogic {
 
@@ -12,12 +14,16 @@ public class CountdownLogic {
     public String getCountdownText() {return countdownText;}
 
     public void CalculateTime(int hours, int minutes, int seconds) {
-        totalTime = (hours * 3600000) + (minutes * 60000) + (seconds * 1000);
+        totalTime = (hours * 3600) + (minutes * 60) + (seconds);
+    }
+
+    public void SaveCountdownProgress(int totalTime) {
+        DataHolder.getInstance().setTotalTime(totalTime);
     }
 
     public String upDateTimer(int secondsLeft) {
         longNum = secondsLeft;
-        totalTime = secondsLeft;
+        DataHolder.getInstance().setTotalTime(secondsLeft);
         int hours = longNum / 3600;
         longNum = longNum - hours * 3600;
         int minutes = longNum / 60;

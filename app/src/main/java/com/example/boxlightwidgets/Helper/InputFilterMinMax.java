@@ -1,4 +1,4 @@
-package com.example.boxlightwidgets;
+package com.example.boxlightwidgets.Helper;
 
 import android.text.InputFilter;
 import android.text.Spanned;

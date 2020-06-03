@@ -1,17 +1,24 @@
 package com.example.boxlightwidgets;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.Settings;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        checkRecorderPermissions();
 
         if (Settings.canDrawOverlays(this)) {
 
@@ -47,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
 
             // Launch Intent, with the supplied request code
             startActivityForResult(intent, REQUEST_CODE);
+        }
+    }
+
+    private void checkRecorderPermissions() {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) +
+                ContextCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.RECORD_AUDIO}, REQUEST_CODE);
+
         }
     }
 

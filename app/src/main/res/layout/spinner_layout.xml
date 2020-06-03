@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/max_frameLayout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/frame_layout_background"
+    tools:ignore="Overdraw">
+
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginEnd="150dp"
+        android:text="Button" />
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginStart="150dp"
+        android:text="Button" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:text="Button" />
+
+    <ImageView
+        android:id="@+id/cirlce1"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:src="@drawable/half_circle"
+        android:layout_gravity="center"/>
+
+    <ImageView
+        android:id="@+id/cirlce2"
+        android:layout_width="300dp"
+        android:layout_height="153dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="150dp"
+        android:rotation="180"
+        android:src="@drawable/half_circle" />
+
+
+</FrameLayout>

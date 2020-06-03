@@ -1,13 +1,14 @@
-package com.example.boxlightwidgets;
+package com.example.boxlightwidgets.Countdown;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.NumberPicker;
-import android.widget.Toast;
+
+import com.example.boxlightwidgets.Helper.DataHolder;
+import com.example.boxlightwidgets.R;
+import com.example.boxlightwidgets.Helper.WidgetController;
 
 public class CountdownMaxEdit extends Activity {
 
@@ -16,12 +17,13 @@ public class CountdownMaxEdit extends Activity {
     private NumberPicker secondsPicker;
     private NumberPicker minutesPicker;
     private NumberPicker hoursPicker;
-    private ImageView playBtn;
-    private ImageView exitFullScrn;
+    private Button playBtn;
+    private Button exitFullScrn;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         DataHolder.getInstance().setIsPaused(false);
         setContentView(R.layout.countdown_edit_max);
@@ -50,19 +52,33 @@ public class CountdownMaxEdit extends Activity {
     }
 
     private void CountdownMaxEditController() {
-        WidgetController countdownMaxEditController = new WidgetController();
-        countdownMaxEditController.CountdownMaxEditController(exitFullScrn, playBtn, hoursPicker, minutesPicker, secondsPicker, CountdownMaxEdit.class, this);
-    }
+        final WidgetController countdownMaxEditController = new WidgetController();
+        //countdownMaxEditController.CountdownMaxEditController(exitFullScrn, playBtn, hoursPicker, minutesPicker, secondsPicker, CountdownMaxEdit.class, this);
 
-    public void youreDone() {
-        finish();
-        System.out.println("TRYING TO DESTROY");
-    }
+        exitFullScrn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                countdownMaxEditController.NewService(CountdownMinEdit.class, v.getContext());
+                finish();
+            }
+        });
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        finish();
+        playBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int totalTime = countdownMaxEditController.calculatateTime(hoursPicker.getValue(), minutesPicker.getValue(), secondsPicker.getValue());
+                boolean isValid = countdownMaxEditController.isTimeValid(totalTime, v.getContext());
+                if (!isValid) {
+                    System.out.println("Time not valid --- re-enter value");
+                } else if (isValid) {
+                    countdownMaxEditController.NewActivity(CountdownMax.class, v.getContext());
+                    finish();
+                } else {
+                    System.out.println("isValid not initialised.");
+                }
+
+            }
+        });
     }
 
 }

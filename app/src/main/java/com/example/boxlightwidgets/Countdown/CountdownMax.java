@@ -1,39 +1,43 @@
-package com.example.boxlightwidgets;
+package com.example.boxlightwidgets.Countdown;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.boxlightwidgets.Helper.DataHolder;
+import com.example.boxlightwidgets.R;
+import com.example.boxlightwidgets.Helper.WidgetController;
+
 public class CountdownMax extends Activity {
     private TextView countdownText;
-    private ImageView pauseBtn;
-    private ImageView stopBtn;
-    private ImageView exitFullScrn;
+    private Button pauseBtn;
+    private Button stopBtn;
+    private Button exitFullScrn;
     private CountDownTimer countDownTimer;
     private int totalTime;
     private ProgressBar progressBar;
     private double masterTotalTime;
 
-    private CountdownLogic cntdwn;
+    private CountdownLogic countdownLogic = new CountdownLogic();
+    private WidgetController maxCountdownController = new WidgetController();
     private int prevProgress = 0;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.countdown_max);
-        cntdwn = new CountdownLogic();
 
         //Extract time remaining from DataHolder
-        totalTime = DataHolder.getInstance().getTotalTime();
+        totalTime = DataHolder.getInstance().getTotalTime() * 1000;
         masterTotalTime = DataHolder.getInstance().getMasterTotalTime();
         InitialiseScreenObjects();
     }
@@ -48,12 +52,12 @@ public class CountdownMax extends Activity {
         progressBar.setMax(1000);
 
         if(!DataHolder.getInstance().getIsPaused()) {
-            MaxCountdownController(); //Set controls
             StartCountdown();
+            MaxCountdownController();
         } else {
-            pauseBtn.setImageResource(R.drawable.ic_start);
+            pauseBtn.setBackgroundResource(R.drawable.ic_start);
             System.out.println("b: " + totalTime);
-            countdownText.setText(cntdwn.upDateTimer(totalTime / 1000));
+            countdownText.setText(countdownLogic.upDateTimer(totalTime / 1000));
             MaxCountdownController(); //Set controls
             System.out.println("a: " + totalTime);
         }
@@ -64,71 +68,53 @@ public class CountdownMax extends Activity {
             prevProgress = 1000;
         }
         masterTotalTime = DataHolder.getInstance().getMasterTotalTime();
-        double progress = milliseconds / masterTotalTime * 1000;
+        double progress = milliseconds / masterTotalTime;
         progressBar.setProgress((int) progress);
+        System.out.println(progress);
+        System.out.println("Bar P: " + progressBar.getProgress());
     }
 
     public void MaxCountdownController() {
-        pauseBtn.setOnTouchListener(new View.OnTouchListener() {
+        pauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (!DataHolder.getInstance().getIsPaused()) {
-                        countDownTimer.cancel();
-                        pauseBtn.setImageResource(R.drawable.ic_start);
-                        DataHolder.getInstance().setIsPaused(true);
-                        CalculateTime();
-                        DataHolder.getInstance().setTotalTime(totalTime);
-                    } else {
-                        StartCountdown();
-                        pauseBtn.setImageResource(R.drawable.ic_pause);
-                        DataHolder.getInstance().setIsPaused(false);
-                    }
-
+            public void onClick(View v) {
+                countDownTimer.cancel();
+                if (!DataHolder.getInstance().getIsPaused()) {
+                    pauseBtn.setBackgroundResource(R.drawable.ic_start);
+                    DataHolder.getInstance().setIsPaused(true);
+                } else if (DataHolder.getInstance().getIsPaused()) {
+                    pauseBtn.setBackgroundResource(R.drawable.ic_pause);
+                    DataHolder.getInstance().setIsPaused(false);
+                    StartCountdown();
                 }
-                return false;
             }
         });
 
-        stopBtn.setOnTouchListener(new View.OnTouchListener() {
+        stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    countDownTimer.cancel();
-                    Intent intent = new Intent(v.getContext(), CountdownMaxEdit.class);
-                    startActivity(intent);
-                    finish();
-                }
-                return false;
+            public void onClick(View v) {
+                countDownTimer.cancel();
+                maxCountdownController.NewActivity(CountdownMaxEdit.class, v.getContext());
+                finish();
             }
         });
 
-        exitFullScrn.setOnTouchListener(new View.OnTouchListener() {
+        exitFullScrn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    countDownTimer.cancel();
-                    CalculateTime();
-                    Intent svc = new Intent(v.getContext(), CountdownMin.class);
-                    DataHolder.getInstance().setTotalTime(totalTime);
-                    stopService(svc);
-                    startService(svc);
-                    finish();
-                }
-                return false;
+            public void onClick(View v) {
+                countDownTimer.cancel();
+                countdownLogic.SaveCountdownProgress(DataHolder.getInstance().getTotalTime());
+                maxCountdownController.NewService(CountdownMin.class, v.getContext());
+                finish();
             }
         });
-    }
-
-    public void CalculateTime() {
-        totalTime = cntdwn.getTotalTime() * 1000;
     }
 
     public void StartCountdown() {
-        countDownTimer = new CountDownTimer(totalTime + 100, 100) {
+        countDownTimer = new CountDownTimer(DataHolder.getInstance().getTotalTime() * 1000 + 100, 100) {
             @Override
             public void onTick(long millisUntilFinished) {
-                countdownText.setText(cntdwn.upDateTimer((int) millisUntilFinished / 1000));
+                countdownText.setText(countdownLogic.upDateTimer((int) millisUntilFinished / 1000));
                 UpdateProgress((int) millisUntilFinished);
             }
             @Override

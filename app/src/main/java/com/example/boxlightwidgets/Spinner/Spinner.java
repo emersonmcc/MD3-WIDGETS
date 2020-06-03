@@ -1,4 +1,4 @@
-package com.example.boxlightwidgets;
+package com.example.boxlightwidgets.Spinner;
 
 import android.app.Service;
 import android.content.Context;
@@ -9,22 +9,28 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
-public class Calculator extends Service {
+import androidx.annotation.Nullable;
 
-    private WindowManager windowManager;
-    private View calculatorView;
+import com.example.boxlightwidgets.R;
+
+public class Spinner extends Service {
+
     private WindowManager.LayoutParams params;
-    private Button closeBtn;
+    private ImageView countdown;
+    private View spinnerView;
+    private WindowManager windowManager;
 
+
+
+    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-
         return null;
     }
 
@@ -32,11 +38,11 @@ public class Calculator extends Service {
     public void onCreate() {
         super.onCreate();
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        AddCalculatorView();
-        CalculatorController();
+        addSpinnerView();
+        SpinnerController();
     }
 
-    public void AddCalculatorView() {
+    public void addSpinnerView() {
         int layoutParamsType;
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -47,17 +53,17 @@ public class Calculator extends Service {
         }
 
         params = new WindowManager.LayoutParams(
-                500,
-                500,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
                 layoutParamsType,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
-        params.gravity = Gravity.CENTER | Gravity.CENTER;
+        params.gravity = Gravity.CENTER;
         params.x = 0;
         params.y = 0;
 
-        LinearLayout interceptorLayout = new LinearLayout(this) {
+        FrameLayout interceptorLayout = new FrameLayout(this) {
 
             @Override
             public boolean dispatchKeyEvent(KeyEvent event) {
@@ -68,7 +74,7 @@ public class Calculator extends Service {
                     // Check if the HOME button is pressed
                     if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
 
-                        Log.v("info", "BACK Button Pressed");
+                        Log.v("toolbar.class", "BACK Button Pressed");
 
                         // As we've taken action, we'll return true to prevent other apps from consuming the event as well
                         return true;
@@ -79,45 +85,20 @@ public class Calculator extends Service {
                 return super.dispatchKeyEvent(event);
             }
         };
-
         LayoutInflater inflater = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
 
         if (inflater != null) {
-            calculatorView = inflater.inflate(R.layout.calculator_layout, interceptorLayout);
-            calculatorView.setBackgroundResource(R.drawable.frame_layout_background);
-            windowManager.addView(calculatorView, params);
-            closeBtn = calculatorView.findViewById(R.id.btn_close);
-        } else {
+            spinnerView = inflater.inflate(R.layout.spinner_layout, interceptorLayout);
+            windowManager.addView(spinnerView, params);
+            countdown = spinnerView.findViewById(R.id.count);
+        }
+        else {
             Log.e("SAW-example", "Layout Inflater Service is null; can't inflate and display R.layout.floating_view");
         }
+
     }
 
-    public void CalculatorController() {
-        closeBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    onDestroy(calculatorView);
-                    DataHolder.getInstance().setCalculatorOpened(false);
-                }
-                return false;
-            }
-        });
+    private void SpinnerController() {
 
-        WidgetController calculatorMove = new WidgetController();
-        //calculatorMove.CountdownEditController(calculatorView, windowManager, params);
     }
-
-    public void onDestroy(View view) {
-
-        super.onDestroy();
-
-        if (view != null) {
-
-            windowManager.removeView(view);
-
-            view = null;
-        }
-    }
-
 }

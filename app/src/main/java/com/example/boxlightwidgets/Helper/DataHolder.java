@@ -1,4 +1,4 @@
-package com.example.boxlightwidgets;
+package com.example.boxlightwidgets.Helper;
 
 public class DataHolder {
     private int totalTime;

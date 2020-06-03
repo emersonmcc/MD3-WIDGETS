@@ -1,4 +1,4 @@
-package com.example.boxlightwidgets;
+package com.example.boxlightwidgets.Countdown;
 
 
 import android.annotation.SuppressLint;
@@ -15,11 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.NumberPicker;
 
 import androidx.annotation.RequiresApi;
+
+import com.example.boxlightwidgets.Helper.DataHolder;
+import com.example.boxlightwidgets.R;
+import com.example.boxlightwidgets.Helper.WidgetController;
 
 public class CountdownMinEdit extends Service {
 
@@ -28,9 +32,9 @@ public class CountdownMinEdit extends Service {
     private WindowManager windowManager;
 
     private View minCountdownEditView;
-    private ImageView closeBtn;
-    private ImageView fullscreenBtn;
-    private ImageView playBtn;
+    private Button closeBtn;
+    private Button fullscreenBtn;
+    private Button playBtn;
     private NumberPicker secondsPicker;
     private NumberPicker minutesPicker;
     private NumberPicker hoursPicker;
@@ -100,7 +104,7 @@ public class CountdownMinEdit extends Service {
         LayoutInflater inflater = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
 
         if (inflater != null) {
-            minCountdownEditView = inflater.inflate(R.layout.countdown_layout, interceptorLayout);
+            minCountdownEditView = inflater.inflate(R.layout.countdown_min_edit, interceptorLayout);
             windowManager.addView(minCountdownEditView, params);
             closeBtn = minCountdownEditView.findViewById(R.id.closeBtn);
             playBtn = minCountdownEditView.findViewById(R.id.playBtn);
@@ -127,8 +131,50 @@ public class CountdownMinEdit extends Service {
     }
 
     private void CountdownEditController() {
-        WidgetController countdownEditController = new WidgetController();
-        countdownEditController.CountdownMinEditController(closeBtn, fullscreenBtn, playBtn, hoursPicker, minutesPicker, secondsPicker, minCountdownEditView,
-                windowManager, params, CountdownMinEdit.class, getApplicationContext());
+        final WidgetController countdownEditController = new WidgetController();
+
+        countdownEditController.EnableMovement(minCountdownEditView, windowManager, params);
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDestroy(minCountdownEditView);
+            }
+        });
+
+        fullscreenBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                countdownEditController.NewActivity(CountdownMaxEdit.class, v.getContext());
+                onDestroy(minCountdownEditView);
+            }
+        });
+
+        playBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int totalTime = countdownEditController.calculatateTime(hoursPicker.getValue(), minutesPicker.getValue(), secondsPicker.getValue());
+                boolean isValid = countdownEditController.isTimeValid(totalTime, getApplicationContext());
+                if (!isValid) {
+                    System.out.println("Time not valid --- re-enter value");
+                } else if (isValid) {
+                    countdownEditController.NewService(CountdownMin.class, getApplicationContext());
+                    onDestroy(minCountdownEditView);
+                } else {
+                    System.out.println("isValid not initialised.");
+                }
+
+            }
+        });
+    }
+
+    private void onDestroy(View view) {
+
+        if (view != null) {
+
+            windowManager.removeView(view);
+
+            view = null;
+        }
     }
 }

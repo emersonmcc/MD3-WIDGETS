@@ -30,32 +30,32 @@
 
 
 
-    <ImageView
+    <Button
         android:id="@+id/exitFllscreenBtn"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/ic_fullscreen_exit"
+        android:background="@drawable/ic_fullscreen_exit"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"/>
 
-    <ImageView
+    <Button
         android:id="@+id/pauseBtn"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_gravity="center"
         android:layout_marginTop="75dp"
         android:layout_marginEnd="35dp"
-        android:src="@drawable/ic_pause"/>
+        android:background="@drawable/ic_pause"/>
 
-    <ImageView
+    <Button
         android:id="@+id/stopBtn"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_gravity="center|center"
         android:layout_marginTop="75dp"
         android:layout_marginStart="35dp"
-        android:src="@drawable/ic_stop"/>
+        android:background="@drawable/ic_stop"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

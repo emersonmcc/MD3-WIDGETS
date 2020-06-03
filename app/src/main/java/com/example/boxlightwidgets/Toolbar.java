@@ -18,12 +18,18 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
+import com.example.boxlightwidgets.Calculator.Calculator;
+import com.example.boxlightwidgets.Countdown.CountdownMinEdit;
+import com.example.boxlightwidgets.Helper.DataHolder;
+import com.example.boxlightwidgets.ScreenRecorder.ScreenRecorder;
+
 public class Toolbar extends Service {
 
     private WindowManager.LayoutParams params;
     private ImageView countdown;
     private ImageView calculator;
     private ImageView close;
+    private ImageView screenRecord;
     private View toolbar;
     private WindowManager windowManager;
 
@@ -92,6 +98,7 @@ public class Toolbar extends Service {
             countdown = toolbar.findViewById(R.id.count);
             calculator = toolbar.findViewById(R.id.calc);
             close = toolbar.findViewById(R.id.closeBtn);
+            screenRecord = toolbar.findViewById(R.id.camera);
         }
         else {
             Log.e("SAW-example", "Layout Inflater Service is null; can't inflate and display R.layout.floating_view");
@@ -136,6 +143,17 @@ public class Toolbar extends Service {
                         DataHolder.getInstance().setCountdownOpened(true);
                     }
 
+                }
+                return false;
+            }
+        });
+
+        screenRecord.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Intent act = new Intent(getApplicationContext(), ScreenRecorder.class);
+                    startActivity(act);
                 }
                 return false;
             }

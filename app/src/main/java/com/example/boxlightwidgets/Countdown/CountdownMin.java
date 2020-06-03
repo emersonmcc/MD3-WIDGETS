@@ -1,4 +1,4 @@
-package com.example.boxlightwidgets;
+package com.example.boxlightwidgets.Countdown;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -13,16 +13,19 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+
+import com.example.boxlightwidgets.Helper.DataHolder;
+import com.example.boxlightwidgets.R;
+import com.example.boxlightwidgets.Helper.WidgetController;
 
 import static java.lang.Integer.getInteger;
 import static java.lang.Integer.parseInt;
@@ -34,16 +37,16 @@ public class CountdownMin extends Service {
     private WindowManager windowManager;
 
     private View minimisedCountdownView;
-    private ImageView closeBtn;
-    private ImageView fullscreenBtn;
-    private ImageView pauseBtn;
-    private ImageView stopBtn;
+    private Button closeBtn;
+    private Button fullscreenBtn;
+    private Button pauseBtn;
+    private Button stopBtn;
     private int totalTime;
     private CountDownTimer countDownTimer;
     private TextView countdownText;
     private WindowManager.LayoutParams params;
-
-    private CountdownLogic cntdwn;
+    private CountdownLogic countdownLogic = new CountdownLogic();
+    private WidgetController countdownMinController = new WidgetController();
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -56,28 +59,29 @@ public class CountdownMin extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        cntdwn = new CountdownLogic();
         totalTime = DataHolder.getInstance().getTotalTime(); // Set total time
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        addCountdownMinimisedView(); //Add the countdown overlay to the view
+         //Add the countdown overlay to the view
 
         if(!DataHolder.getInstance().getIsPaused()) {
             StartCountdown();
+            addCountdownMinimisedView();
         } else {
-            pauseBtn.setImageResource(R.drawable.ic_start);
-            countdownText.setText(cntdwn.upDateTimer(totalTime / 1000));
+            pauseBtn.setBackgroundResource(R.drawable.ic_start);
+            countdownText.setText(countdownLogic.upDateTimer(totalTime / 1000));
         }
     }
 
-    public void CalculateTime() {totalTime = cntdwn.getTotalTime() * 1000;}
+    public int CalculateTime() {return totalTime = countdownLogic.getTotalTime() * 1000;}
+
+
 
     public void StartCountdown() {
-
-        countDownTimer = new CountDownTimer(totalTime + 100, 1000) {
+        countDownTimer = new CountDownTimer(DataHolder.getInstance().getTotalTime() * 1000 + 100, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                countdownText.setText(cntdwn.upDateTimer((int) millisUntilFinished / 1000));
+                countdownText.setText(countdownLogic.upDateTimer((int) millisUntilFinished / 1000));
             }
 
             @Override
@@ -158,92 +162,53 @@ public class CountdownMin extends Service {
     }
 
     private void MinimisedCountdownController() {
-        closeBtn.setOnTouchListener(new View.OnTouchListener() {
+        pauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    onDestroy(minimisedCountdownView);
+            public void onClick(View v) {
+                countDownTimer.cancel();
+                if (!DataHolder.getInstance().getIsPaused()) {
+                    pauseBtn.setBackgroundResource(R.drawable.ic_start);
+                    DataHolder.getInstance().setIsPaused(true);
+                } else if (DataHolder.getInstance().getIsPaused()) {
+                    pauseBtn.setBackgroundResource(R.drawable.ic_pause);
+                    DataHolder.getInstance().setIsPaused(false);
+                    StartCountdown();
                 }
-                return false;
             }
         });
 
-        pauseBtn.setOnTouchListener(new View.OnTouchListener() {
+        stopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (!DataHolder.getInstance().getIsPaused()) {
-                        countDownTimer.cancel();
-                        pauseBtn.setImageResource(R.drawable.ic_start);
-                        DataHolder.getInstance().setIsPaused(true);
-                        CalculateTime();
-                        DataHolder.getInstance().setTotalTime(totalTime);
-                    } else {
-                        StartCountdown();
-                        pauseBtn.setImageResource(R.drawable.ic_pause);
-                        DataHolder.getInstance().setIsPaused(false);
-                    }
-
-                }
-                return false;
+            public void onClick(View v) {
+                countDownTimer.cancel();
+                countdownMinController.NewService(CountdownMinEdit.class, v.getContext());
+                onDestroy(minimisedCountdownView);
             }
         });
 
-        stopBtn.setOnTouchListener(new View.OnTouchListener() {
+        closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    countDownTimer.cancel();
-                    Intent intent = new Intent(getApplicationContext(), CountdownMinEdit.class);
-                    stopService(intent);
-                    startService(intent);
-                    onDestroy(minimisedCountdownView);
-                }
-                return false;
+            public void onClick(View v) {
+                countDownTimer.cancel();
+                onDestroy(minimisedCountdownView);
             }
         });
 
         fullscreenBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), CountdownMax.class);
                 countDownTimer.cancel();
-                CalculateTime();
-                System.out.println("before: " + totalTime);
-                DataHolder.getInstance().setTotalTime(totalTime);
-                startActivity(intent);
+                countdownLogic.SaveCountdownProgress(DataHolder.getInstance().getTotalTime());
+                countdownMinController.NewActivity(CountdownMax.class, v.getContext());
                 onDestroy(minimisedCountdownView);
             }
         });
-
-        minimisedCountdownView.setOnTouchListener(new View.OnTouchListener() {
-            private WindowManager.LayoutParams updatedParameters = params;
-            int x, y;
-            float touchX, touchY;
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                    //When detects one finger, mode is set to none for basic movement.
-                    case MotionEvent.ACTION_DOWN:
-                        x = updatedParameters.x;
-                        y = updatedParameters.y;
-                        touchX = event.getRawX();
-                        touchY = event.getRawY();
-                        return true;
-
-                    case MotionEvent.ACTION_MOVE:
-                        updatedParameters.x = (int) (x + (event.getRawX() - touchX));
-                        updatedParameters.y = (int) (y + (event.getRawY() - touchY));
-                        windowManager.updateViewLayout(minimisedCountdownView, updatedParameters);
-                        System.out.println("3");
-                        return true;
-                }
-                return false;
-            }
-        });
-        WidgetController countdownMinController = new WidgetController();
-        countdownMinController.CountdownMinController(pauseBtn, stopBtn, fullscreenBtn, closeBtn, CountdownMin.class, this);
     }
+
+    public CountDownTimer getCountDownTimer() {return countDownTimer;}
+
+    public void setCountDownTimer(CountDownTimer countDownTimer) {this.countDownTimer = countDownTimer;}
+    public void setCountdownText(TextView countdownText) {this.countdownText = countdownText;}
 
     public void onDestroy(View view) {
 
