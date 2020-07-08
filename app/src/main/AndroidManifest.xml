@@ -2,7 +2,7 @@
 <manifest
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.boxlightwidgets"
+    package="com.boxlight.widgets"
     tools:ignore="GoogleAppIndexingWarning">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -30,13 +30,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Countdown.CountdownMax">
+        <activity android:name=".Timer.CountdownMax">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".Countdown.CountdownMaxEdit" android:noHistory="true">
+        <activity android:name=".Timer.CountdownMaxEdit" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
@@ -56,11 +56,15 @@
             />
 
         <service
-            android:name=".Countdown.CountdownMin"
+            android:name=".Timer.Stopwatch"
             android:exported="false"/>
 
         <service
-            android:name=".Countdown.CountdownMinEdit" android:exported="true">
+            android:name=".Timer.CountdownMin"
+            android:exported="false"/>
+
+        <service
+            android:name=".Timer.CountdownMinEdit" android:exported="true">
             <intent-filter>
                 <action android:name="StartCountdownService"/>
             </intent-filter>

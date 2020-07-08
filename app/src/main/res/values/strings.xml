@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Boxlight Widgets</string>
+    <string name="soundActive">true</string>
 </resources>

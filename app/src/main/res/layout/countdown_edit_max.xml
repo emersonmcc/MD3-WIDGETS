@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/fullscreen_background"
-    tools:ignore="Overdraw">
+    android:background="@drawable/fullscreen_background">
 
     <TextView
         android:id="@+id/countdownTitle"
@@ -119,6 +118,15 @@
         android:background="@drawable/ic_start" />
 
     <Button
+        android:id="@+id/settingsBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ic_settings"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="40dp"/>
+
+    <Button
         android:id="@+id/exitFllscreenBtn"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -126,5 +134,4 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"/>
-
 </FrameLayout>

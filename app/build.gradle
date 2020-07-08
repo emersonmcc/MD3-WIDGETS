@@ -5,8 +5,8 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.example.boxlightwidgets"
-        minSdkVersion 24
+        applicationId "com.boxlight.widgets"
+        minSdkVersion 26
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -23,7 +23,7 @@ android {
     sourceSets {
         main {
             java {
-                srcDirs 'src/main/java', 'src/main/java/com.example.boxlightwidgets/Calculator', 'src/main/java/com.example.boxlightwidgets/calculator'
+                srcDirs 'src/main/java', 'src/main/java/com.boxlight.widgets/Calculator', 'src/main/java/com.boxlight.widgets/calculator'
             }
         }
     }
@@ -44,4 +44,6 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'net.objecthunter:exp4j:0.4.4'
+    implementation 'com.github.yukuku:ambilwarna:2.0.1'
+    implementation 'com.github.angads25:filepicker:1.1.1'
 }

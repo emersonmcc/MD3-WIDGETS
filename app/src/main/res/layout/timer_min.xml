@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="100dp"
+    android:layout_width="310dp"
+    android:background="@drawable/frame_layout_background">
+
+    <Chronometer
+        android:id="@+id/stopwatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center"
+        android:textSize="50sp"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/startTimer"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="end|center"
+        android:layout_marginEnd="70dp"
+        android:onClick="start"
+        android:background="@drawable/ic_pause"/>
+
+    <Button
+        android:id="@+id/stopTimer"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="end|center"
+        android:layout_marginEnd="20dp"
+        android:onClick="stop"
+        android:background="@drawable/ic_stop"/>
+
+    <Button
+        android:id="@+id/closeBtn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="end|top"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ic_close"
+        android:onClick="Exit"/>
+
+    <Button
+        android:id="@+id/fullscreenBtn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/ic_fullscreen"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:onClick="EnterFullScreen"/>
+
+</FrameLayout>

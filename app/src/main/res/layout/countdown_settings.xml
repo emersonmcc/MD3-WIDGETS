@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/soundTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
+        android:text="Enable Sound"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/soundSwitch"
+        android:layout_width="50dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="13dp"
+        android:scaleY=".7"
+        android:scaleX=".7"
+        android:checked="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/customSoundTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/soundTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:text="Customer Alarm Sound"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"/>
+
+    <Button
+        android:id="@+id/openCustomSound"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        app:layout_constraintTop_toBottomOf="@id/soundSwitch"
+        app:layout_constraintEnd_toEndOf="@id/soundSwitch"
+        android:text="EDIT"
+        android:textSize="8sp"/>
+
+    <TextView
+        android:id="@+id/colourPickerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/customSoundTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:text="Background Color"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"/>
+
+    <Button
+        android:id="@+id/openColorPicker"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        app:layout_constraintTop_toBottomOf="@id/openCustomSound"
+        app:layout_constraintEnd_toEndOf="@id/openCustomSound"
+        android:text="EDIT"
+        android:textSize="8sp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
